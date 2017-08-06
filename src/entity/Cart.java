@@ -2,6 +2,7 @@ package entity;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -45,7 +46,16 @@ public class Cart {
      * @return  true表示添加商品成功
      */
     public boolean addGoodsInCart(Items items, int number){
-        goods.put(items,number);
+
+        /**
+         * 判断是否添加的是重复商品，如果是的话数量增加
+         */
+        if(goods.containsKey(items)){
+            goods.put(items,goods.get(items) + number);
+        }else {
+            goods.put(items,number);
+        }
+
         this.calTotalPrice();
         return true;
     }
@@ -83,12 +93,30 @@ public class Cart {
                 200, 3000, "001.jpg");
         Items items2 = new Items(2, "阿迪运动鞋", "福建",
                 300, 2600, "002.jpg");
+        Items items3 = new Items(1, "李宁跑步鞋", "温州",
+                200, 3000, "001.jpg");
 
         Cart cart1 = new Cart();
         cart1.addGoodsInCart(items1,1);
         cart1.addGoodsInCart(items2,2);
+        cart1.addGoodsInCart(items3,2);
+
+        Iterator iterator = cart1.getGoods().entrySet().iterator();
+        while (iterator.hasNext()){
+
+            Map.Entry entry = (Map.Entry)iterator.next();
+            Items items = (Items) entry.getKey();
+            int number = (int)entry.getValue();
+            
+            System.out.print("购物车中的商品：");
+            System.out.print("商品id：" + items.getItem_id() + "  商品名：" + items.getItem_name() +
+                    "  商品产地：" + items.getItem_place() + "  商品单价：" + items.getItem_price() +
+                    "  库存：" + items.getItem_left());
+            System.out.println("  购物车中数量：" + number);
+        }
 
         System.out.println("购物车总金额：" + cart1.getTotalPrice());
+
     }
 
 }
