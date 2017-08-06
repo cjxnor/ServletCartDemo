@@ -36,6 +36,11 @@ public class Items {
     private String item_url;
 
     /**
+     * 不带参数的构造方法
+     */
+    public Items(){}
+
+    /**
      * 带参构造方法
      * @param item_id
      * @param item_name
@@ -102,4 +107,37 @@ public class Items {
         this.item_url = item_url;
     }
 
+
+
+    /**
+     * 为避免添加重复商品，重写hashCode()及equals()方法
+     * @return
+     */
+    @Override
+    public int hashCode() {
+        return this.getItem_id() + this.getItem_name().hashCode();
+    }
+
+    /**
+     * 根据商品ID和Name判断两个商品是否相等
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+
+        if(this == obj){
+            return true;
+        }
+        if (obj instanceof Items){
+            Items items = (Items) obj;
+            if(this.getItem_id() == items.getItem_id() && this.getItem_name() == items.getItem_name()){
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
+    }
 }

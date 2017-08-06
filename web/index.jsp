@@ -8,9 +8,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <title>$Title$</title>
+    <title>商品展示</title>
   </head>
   <body>
-  $END$
+    <h1>商品展示</h1>
+
+  <%= request.getContextPath()%>
+  <%= request.getScheme()%>
+  <%= request.getServerName()%>
+
+
   </body>
 </html>

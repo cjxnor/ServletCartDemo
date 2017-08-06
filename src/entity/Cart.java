@@ -1,9 +1,8 @@
 package entity;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import dao.ItemsDAO;
+
+import java.util.*;
 
 /**
  * 购物车类
@@ -66,6 +65,7 @@ public class Cart {
      * @return      true表示删除商品成功
      */
     public boolean rmGoodsFromCart(Items items){
+
         goods.remove(items);
         this.calTotalPrice();
         return true;
@@ -77,30 +77,66 @@ public class Cart {
      */
     public double calTotalPrice(){
         double sum = 0.0;
-        Set<Items> keys = goods.keySet();
-        Iterator<Items> iterator = keys.iterator();
+
+        /**
+         * 遍历goods实现总金额计算
+         */
+        Iterator iterator = goods.entrySet().iterator();
         while (iterator.hasNext()){
-            Items items = iterator.next();
-            sum += items.getItem_price() * goods.get(items);
+
+            Map.Entry entry = (Map.Entry) iterator.next();
+            Items items = (Items) entry.getKey();
+            int number = (int) entry.getValue();
+            sum += items.getItem_price() * number;
         }
         this.setTotalPrice(sum);
         return sum;
     }
 
+
     public static void main(String args[]){
 
-        Items items1 = new Items(1, "李宁跑步鞋", "温州",
-                200, 3000, "001.jpg");
-        Items items2 = new Items(2, "阿迪运动鞋", "福建",
-                300, 2600, "002.jpg");
-        Items items3 = new Items(1, "李宁跑步鞋", "温州",
-                200, 3000, "001.jpg");
-
         Cart cart1 = new Cart();
-        cart1.addGoodsInCart(items1,1);
-        cart1.addGoodsInCart(items2,2);
-        cart1.addGoodsInCart(items3,2);
 
+        /**
+         * 测试代码
+         * 手动输入商品信息
+         * ↓↓↓↓↓↓↓↓↓↓↓
+         */
+//        Items items1 = new Items(1, "李宁跑步鞋", "温州",
+//                200, 3000, "001.jpg");
+//        Items items2 = new Items(2, "阿迪运动鞋", "福建",
+//                300, 2600, "002.jpg");
+//        Items items3 = new Items(1, "李宁跑步鞋", "温州",
+//                200, 3000, "001.jpg");
+//        cart1.addGoodsInCart(items1,1);
+//        cart1.addGoodsInCart(items2,2);
+//        cart1.addGoodsInCart(items3,2);
+        /**
+         * ↑↑↑↑↑↑↑↑↑↑↑
+         */
+
+
+        /**
+         * 测试代码
+         * 从数据库中读取商品信息
+         * ↓↓↓↓↓↓↓↓↓↓↓
+         */
+        ItemsDAO itemsDAO = new ItemsDAO();
+
+        ArrayList<Items> cartitems = itemsDAO.getAllItems();
+
+        for(Items i : cartitems){
+
+            //暂时把所有商品数量设为1
+            cart1.addGoodsInCart(i,1);
+        }
+        /**
+         * ↑↑↑↑↑↑↑↑↑↑↑
+         */
+
+
+        //遍历购物车中的商品 goods
         Iterator iterator = cart1.getGoods().entrySet().iterator();
         while (iterator.hasNext()){
 
