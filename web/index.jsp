@@ -12,7 +12,15 @@
   </head>
   <body>
     <h1>商品展示</h1>
+    <hr>
 
+    <table>
+      <tr>
+        <td>
+          <a href="#">a</a>
+        </td>
+      </tr>
+    </table>
   <%= request.getContextPath()%>
   <%= request.getScheme()%>
   <%= request.getServerName()%>
