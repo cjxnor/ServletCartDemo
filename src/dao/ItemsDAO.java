@@ -11,6 +11,8 @@ import java.util.List;
 
 public class ItemsDAO {
 
+    public ItemsDAO(){}
+
     public ArrayList<Items> getAllItems(){
 
         Connection conn = null;
@@ -67,6 +69,65 @@ public class ItemsDAO {
             }
         }
     }
+
+
+    /**
+     * 根据指定id号返回商品信息
+     * @param id
+     * @return
+     */
+    public Items getItemsById(int id){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBHelper.getConnection();
+            String sql = "select * from goods where id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,id);
+            rs = stmt.executeQuery();
+            if(rs.next()){
+                Items items = new Items();
+                items.setItem_id(rs.getInt("id"));
+                items.setItem_name(rs.getString("name"));
+                items.setItem_place(rs.getString("place"));
+                items.setItem_price(rs.getFloat("price"));
+                items.setItem_left(rs.getInt("left"));
+                items.setItem_url(rs.getString("url"));
+                return items;
+
+            }else {
+
+                return null;
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }finally {
+            // 释放数据集对象
+            if (rs!= null) {
+                try {
+                    rs.close();
+                    rs = null;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            // 释放语句对象
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                    stmt = null;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     /**
      * 获取最近浏览的五条信息

@@ -119,7 +119,7 @@ public class Cart {
 
         /**
          * 测试代码
-         * 从数据库中读取商品信息
+         * 从数据库中读取所有商品信息
          * ↓↓↓↓↓↓↓↓↓↓↓
          */
         ItemsDAO itemsDAO = new ItemsDAO();
@@ -152,6 +152,19 @@ public class Cart {
         }
 
         System.out.println("购物车总金额：" + cart1.getTotalPrice());
+
+
+        /**
+         * 测试 itemsDAO.getItemsById()方法
+         * ↓↓↓↓↓↓↓↓↓↓↓
+         */
+        Items items1 = itemsDAO.getItemsById(1);
+        System.out.print("商品id：" + items1.getItem_id() + "  商品名：" + items1.getItem_name() +
+                "  商品产地：" + items1.getItem_place() + "  商品单价：" + items1.getItem_price() +
+                "  库存：" + items1.getItem_left());
+        /**
+         * ↑↑↑↑↑↑↑↑↑↑↑
+         */
 
     }
 
