@@ -48,6 +48,7 @@
         </td>
       </tr>
     </table>
+  <%= request.getContextPath()%>
 
   </body>
 </html>
