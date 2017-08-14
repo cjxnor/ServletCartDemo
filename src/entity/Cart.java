@@ -131,6 +131,8 @@ public class Cart {
             //暂时把所有商品数量设为1
             cart1.addGoodsInCart(i,1);
         }
+
+        cart1.addGoodsInCart(cartitems.get(1),2);
         /**
          * ↑↑↑↑↑↑↑↑↑↑↑
          */

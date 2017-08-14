@@ -13,6 +13,11 @@ public class ItemsDAO {
 
     public ItemsDAO(){}
 
+
+    /**
+     * 获得所有商品信息
+     * @return
+     */
     public ArrayList<Items> getAllItems(){
 
         Connection conn = null;
@@ -131,11 +136,32 @@ public class ItemsDAO {
 
     /**
      * 获取最近浏览的五条信息
-     * TODO
+     *
      */
         public ArrayList<Items> getViewList(String list){
 
+            if(list != null && list.length() > 0){
 
-            return null;
+                //list不是空的
+                String[] strings = list.split(",");
+                //取最近的五条浏览记录
+                int viewnum = 5;
+                ArrayList<Items> arrayList = new ArrayList<Items>();
+
+                if(strings.length <= viewnum){
+                    for(int i = strings.length -1; i >= 0; i-- ){
+                        arrayList.add(this.getItemsById(Integer.parseInt(strings[i])));
+                    }
+                    return arrayList;
+                }else {
+                    for(int i = strings.length -1; i >= strings.length - viewnum; i-- ){
+                        arrayList.add(this.getItemsById(Integer.parseInt(strings[i])));
+                    }
+                    return arrayList;
+                }
+            }else {
+                return null;
+            }
+
         }
 }

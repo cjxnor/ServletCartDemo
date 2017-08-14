@@ -1,5 +1,6 @@
 <%@ page import="dao.ItemsDAO" %>
-<%@ page import="entity.Items" %><%--
+<%@ page import="entity.Items" %>
+<%@ page import="java.util.ArrayList" %><%--
   Created by IntelliJ IDEA.
   User: cjx
   Date: 2017/8/8
@@ -52,9 +53,11 @@
         function selflog_show(id) {
             var num = document.getElementById("purchaseNo").value;
 
-            <%--使用js弹窗插件传递参数    TODO 弹窗有问题--%>
-            J.dialog.get({id: 'haoyue_creat',title: '购物成功',width: 600,height:400,
-                link: '<%= request.getContextPath()%>/servlet/CartServlet?id=\'+id+\'&num=\'+num+\'&action=add',
+            <%--window.location.href = "<%= request.getContextPath()%>/servlet/CartServlet?id="+id+'&num='+num+'&action=add';--%>
+            <%--使用js弹窗插件传递参数    TODO 弹窗有 问题--%>
+            J.dialog.get({id: 'jAddToCart',title: '加入购物成功',width: 400,height:200,
+                content:'成功加入购购物车',
+                link: '<%= request.getContextPath()%>/servlet/CartServlet?id='+id+'&num='+num+'&action=add',
                 cover:true});
         }
     </script>
@@ -88,9 +91,72 @@
             </td>
         </tr>
     </table>
+
     <div>
-        <a href="javascript:selflog_show(<%= items.getItem_id()%>)"><img src="images/buy_now.png"></a>
+
+        <a href="javascript:selflog_show(<%= items.getItem_id()%>)"><img src="images/in_cart.png"></a>
+        <a href="<%= request.getContextPath()%>/servlet/CartServlet?action=show"><img src="images/view_cart.jpg"></a>
     </div>
+
+    <%
+        String viewlist = "";
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null && cookies.length > 0){
+            for(Cookie c : cookies) {
+
+                if (c.getName().equals("ViewList")) {
+                    viewlist = c.getValue();
+//                    out.print(viewlist);
+                }
+            }
+        }
+
+        viewlist += items.getItem_id() + ",";
+
+        //历史浏览记录大于20就清零
+        String[] strings = viewlist.split(",");
+        if(strings.length >=20){
+            viewlist = "";
+        }
+
+        Cookie cookie = new Cookie("ViewList",viewlist);
+        response.addCookie(cookie);
+    %>
+
+    <hr>
+    <h2>看过的商品</h2>
+    <table>
+
+    <%
+        ArrayList<Items> arrayList = itemsDAO.getViewList(viewlist);
+
+        if(arrayList == null){
+            out.print("无浏览记录");
+        }else {
+
+            for (Items i : arrayList){
+
+    %>
+
+        <tr>
+            <td><img src="images/<%= i.getItem_url()%>" width="100" height="80"></td>
+        </tr>
+        <tr>
+            <td><%= i.getItem_name()%></td>
+        </tr>
+        <tr>
+            <td>价格：<%= i.getItem_price()%></td>
+        </tr>
+        <tr>
+            <td>产地：<%= i.getItem_place()%></td>
+        </tr>
+
+    <%
+            }
+        }
+    %>
+
+    </table>
 
 </body>
 </html>
